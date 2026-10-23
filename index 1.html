@@ -1,0 +1,114 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Disease Prediction System</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4f6fb;--card:#fff;--tx:#17202e;--mut:#5b6678;--pri:#0b5ed7;--bd:#dde3ee;--dg:#fde8e8;--dgb:#c62828;--wn:#fff4d6;--wnb:#d99a00;--ok:#e6f6ec}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1520;--card:#18212f;--tx:#e8edf6;--mut:#9aa7bc;--pri:#5b9bff;--bd:#2a364a;--dg:#3a1c1f;--dgb:#ff6b6b;--wn:#3a3012;--wnb:#f2b632;--ok:#14301f}}
+:root[data-theme="dark"]{--bg:#0f1520;--card:#18212f;--tx:#e8edf6;--mut:#9aa7bc;--pri:#5b9bff;--bd:#2a364a;--dg:#3a1c1f;--dgb:#ff6b6b;--wn:#3a3012;--wnb:#f2b632;--ok:#14301f}
+html{scroll-padding-top:70px;scroll-behavior:smooth}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+nav{position:sticky;top:env(safe-area-inset-top,0px);background:var(--card);border-bottom:1px solid var(--bd);display:flex;gap:16px;align-items:center;padding:12px 20px;overflow-x:auto;white-space:nowrap;z-index:5}
+nav b{margin-right:auto}nav a{color:var(--tx);text-decoration:none;font-size:14px}nav a:hover{color:var(--pri)}
+section{max-width:960px;margin:0 auto;padding:36px 20px}
+.hero{text-align:center;padding:56px 20px 24px}.hero h1{font-size:clamp(28px,6vw,46px);margin:0 0 10px}.hero p{color:var(--mut);max-width:620px;margin:0 auto 20px}
+.btn,button{background:var(--pri);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-size:15px;cursor:pointer;text-decoration:none;display:inline-block}
+button.alt{background:transparent;color:var(--pri);border:1px solid var(--pri)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px}.card h3{margin:0 0 6px;font-size:17px}.card p{margin:0;color:var(--mut);font-size:14px}
+h2{margin:0 0 16px}input,select{background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:9px;font-size:15px;max-width:100%}
+.vit{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:14px}.vit input{width:100%}
+#sy{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:2px 10px;max-height:240px;overflow:auto;margin:10px 0;border:1px solid var(--bd);border-radius:8px;padding:8px}
+.al{padding:10px 12px;border-radius:8px;margin:6px 0;border-left:5px solid}.al.d{background:var(--dg);border-color:var(--dgb)}.al.w{background:var(--wn);border-color:var(--wnb)}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--pri)}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}.flow span{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:7px 14px;font-size:14px}.flow em{color:var(--mut);font-style:normal}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:7px;border-bottom:1px solid var(--bd);text-align:left}
+.disc{background:var(--ok);border-radius:8px;padding:12px;font-size:14px;margin-top:14px}.ov{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;z-index:20;padding:16px}.ov.on{display:flex}
+.mod{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:22px;width:100%;max-width:380px}.mod input{width:100%;margin:5px 0}
+.tabs{display:flex;gap:6px;margin-bottom:12px}.tabs button{flex:1;background:transparent;color:var(--tx);border:1px solid var(--bd)}.tabs button.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+#aerr{color:var(--dgb);font-size:14px;min-height:20px}nav .au{display:flex;gap:8px;align-items:center}nav .au button{padding:6px 12px;font-size:14px}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:24px}
+</style></head><body>
+<nav><b>🩺 DPS</b><a href="#predict">Predict</a><a href="#features">Features</a><a href="#arch">Architecture</a><a href="#history">History</a><a href="#chat">Chat</a><a href="#profile">Profile</a><a href="#limits">Limitations</a><span class="au" id="au"></span></nav>
+
+<div class="hero"><h1>Disease Prediction System</h1><p>Select your symptoms or read live vitals, get a possible disease category with health alerts and a prediction history. An educational machine-learning prototype built with Python, Flask and MySQL.</p><span id="hb2"><button onclick="openAuth('register')">Register</button> <button class="alt" onclick="openAuth('login')">Login</button></span> <a class="btn" href="#predict" style="margin-left:6px">Try the demo</a></div>
+
+<section id="predict"><h2>Symptom checker (interactive demo)</h2>
+<div class="card" id="lock"><h3>🔒 Please log in</h3><p>Register or log in to use the symptom checker.</p><br><button onclick="openAuth('login')">Login</button> <button class="alt" onclick="openAuth('register')">Register</button></div>
+<div class="card" id="demo" style="display:none"><h3>1. Vitals <small style="color:var(--mut);font-weight:400">(optional)</small></h3>
+<div class="vit"><input id="temp" type="number" step="0.1" placeholder="Temp °C"><input id="hr" type="number" placeholder="Heart rate"><input id="spo2" type="number" placeholder="SpO₂ %"><input id="sys" type="number" placeholder="Systolic"><input id="dia" type="number" placeholder="Diastolic"><input id="glu" type="number" placeholder="Glucose mg/dL"></div>
+<button class="alt" onclick="sim()">📡 Simulate sensor reading</button>
+<h3 style="margin-top:16px">2. Symptoms</h3><input id="q" placeholder="🔍 Search symptoms…" oninput="filt()" style="width:100%"><div id="sy"></div>
+<button onclick="run()">Predict</button><div id="out" style="margin-top:14px"></div>
+<p class="disc">⚕️ This web demo uses a simple symptom-overlap score and sample data to show the interface. The real application uses a trained Random Forest model. Results are not a medical diagnosis, so please consult a qualified doctor.</p></div></section>
+
+<section id="features"><h2>Features</h2><div class="grid">
+<div class="card"><h3>🚨 Health alerts</h3><p>Warnings for fever, low SpO₂, abnormal heart rate, high blood pressure and glucose.</p></div>
+<div class="card"><h3>📧 Email summary</h3><p>A prediction summary is sent after each session through Flask-Mail and Gmail SMTP.</p></div>
+<div class="card"><h3>👤 User profile</h3><p>Edit name, email and picture. See total predictions, top disease and feedback accuracy.</p></div>
+<div class="card"><h3>💬 Live chat board</h3><p>A shared message board for users, refreshed every 2 seconds.</p></div>
+<div class="card"><h3>📡 Sensor integration</h3><p>Temperature, heart rate, SpO₂, blood pressure and glucose through serial or BLE (pyserial, bleak).</p></div>
+<div class="card"><h3>📅 Prediction history</h3><p>Every prediction and sensor reading is stored in MySQL, with correct/wrong feedback.</p></div>
+<div class="card"><h3>✅ Dataset validation</h3><p>Checks missing values, duplicates, binary features and class balance before training.</p></div>
+<div class="card"><h3>🧪 Robustness testing</h3><p>Accuracy under symptom noise and dropped symptoms, plus the confusion matrix.</p></div>
+<div class="card"><h3>🔍 Explainability</h3><p>Shows which selected symptoms influenced the prediction most.</p></div></div></section>
+
+<section id="arch"><h2>Architecture</h2><div class="flow"><span>User</span><em>→</em><span>Frontend</span><em>→</em><span>Flask app</span><em>→</em><span>Input validation</span><em>→</em><span>ML model</span><em>→</em><span>Result + alerts</span><em>→</em><span>MySQL history</span></div>
+<p style="text-align:center;color:var(--mut)">Sensors (serial/BLE) → live acquisition → vitals mapped to symptom features → model</p></section>
+
+<section id="history"><h2>Prediction history (this session)</h2><div class="card"><table><thead><tr><th>Time<th>Prediction<th>Confidence<th>Feedback</tr></thead><tbody id="hb"><tr><td colspan="4">No predictions yet.</tr></tbody></table></div></section>
+
+<section id="chat"><h2>Live chat board (demo)</h2><div class="card"><div id="cb" style="height:140px;overflow:auto;border:1px solid var(--bd);border-radius:8px;padding:8px;margin-bottom:8px"></div><input id="cm" placeholder="Type a message…" style="width:72%"> <button onclick="say()">Send</button><p style="margin-top:8px">In the full app, messages are shared between logged-in users.</p></div></section>
+
+<section id="profile"><h2>User profile</h2><p id="pi" style="color:var(--mut)">Log in to see your profile.</p><div class="grid"><div class="card"><h3>Total predictions</h3><p id="s1" style="font-size:26px;color:var(--tx)">0</p></div><div class="card"><h3>Most frequent</h3><p id="s2" style="font-size:20px;color:var(--tx)">—</p></div><div class="card"><h3>Feedback accuracy</h3><p id="s3" style="font-size:20px;color:var(--tx)">No feedback yet</p></div></div></section>
+
+<section id="limits"><h2>Limitations</h2><div class="card"><p>Prediction quality depends on the dataset. Symptoms overlap across diseases, user input may be inaccurate, and the model hasn’t been clinically validated. Sensor readings need a model designed for those inputs. This system is for education only, not for diagnosis.</p></div></section>
+<footer>Disease Prediction System · Python · Flask · scikit-learn · MySQL</footer>
+
+<div class="ov" id="ov" onclick="if(event.target==this)closeAuth()"><div class="mod"><div class="tabs"><button id="tl" onclick="openAuth('login')">Login</button><button id="tr" onclick="openAuth('register')">Register</button></div>
+<input id="an" placeholder="Full name" autocomplete="name"><input id="ae" type="email" placeholder="Email" autocomplete="email"><input id="ap" type="password" placeholder="Password (min 8 characters)" autocomplete="current-password">
+<div id="aerr"></div><button onclick="submitAuth()" style="width:100%" id="asb">Login</button><p style="font-size:12px;color:var(--mut);margin:10px 0 0">Demo only: accounts are stored in this browser. The full Flask app stores users in MySQL with hashed passwords.</p></div></div>
+<script>
+const LS={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+async function hs(p){try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("dps:"+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){let h=0;for(const c of"dps:"+p)h=(h*31+c.charCodeAt(0))|0;return"f"+h}}
+let mode="login",ME=LS.get("dps_session");const mem=[];const users=()=>LS.get("dps_users")||mem;
+function openAuth(m){mode=m;$("ov").classList.add("on");$("an").style.display=m=="register"?"":"none";$("tl").className=m=="login"?"on":"";$("tr").className=m=="register"?"on":"";$("asb").textContent=m=="login"?"Login":"Create account";$("aerr").textContent=""}
+function closeAuth(){$("ov").classList.remove("on")}
+async function submitAuth(){const n=$("an").value.trim(),e=$("ae").value.trim().toLowerCase(),p=$("ap").value,U=users(),err=m=>$("aerr").textContent=m;
+if(!/^\S+@\S+\.\S+$/.test(e))return err("Enter a valid email.");if(p.length<8)return err("Password must be at least 8 characters.");
+const h=await hs(p),u=U.find(x=>x.e==e);
+if(mode=="register"){if(!n)return err("Enter your name.");if(u)return err("Email already registered.");U.push({n,e,h});LS.set("dps_users",U);ME={n,e}}
+else{if(!u||u.h!=h)return err("Invalid email or password.");ME={n:u.n,e:u.e}}
+LS.set("dps_session",ME);$("ap").value="";closeAuth();render();location.hash="#predict"}
+function logout(){ME=null;LS.set("dps_session",null);render()}
+function render(){$("au").innerHTML=ME?`<span style="font-size:14px">👤 ${ME.n.replace(/[<>&"]/g,"")}</span><button class="alt" onclick="logout()">Logout</button>`:`<button class="alt" onclick="openAuth('login')">Login</button><button onclick="openAuth('register')">Register</button>`;
+$("hb2").style.display=ME?"none":"";$("lock").style.display=ME?"none":"";$("demo").style.display=ME?"":"none";
+$("pi").textContent=ME?`Signed in as ${ME.n} (${ME.e})`:"Log in to see your profile."}
+const D={"Common Cold":["cough","runny_nose","sneezing","headache","mild_fever"],"Influenza":["high_fever","chills","muscle_pain","cough","fatigue","headache"],"COVID-like illness":["high_fever","cough","breathlessness","loss_of_smell","fatigue"],"Pneumonia":["high_fever","breathlessness","chest_pain","cough","fast_heart_rate"],"Malaria":["high_fever","chills","sweating","headache","vomiting"],"Dengue":["high_fever","joint_pain","skin_rash","headache","vomiting"],"Gastroenteritis":["vomiting","diarrhoea","abdominal_pain","mild_fever","dehydration"],"Diabetes":["excessive_hunger","fatigue","blurred_vision","frequent_urination","weight_loss"],"Hypertension":["headache","dizziness","chest_pain","blurred_vision","fast_heart_rate"],"Migraine":["headache","nausea","blurred_vision","dizziness","irritability"]};
+const F=[...new Set(Object.values(D).flat())].sort(),EM=["chest_pain","breathlessness"];let H=[];
+const $=id=>document.getElementById(id),v=id=>$(id).value===""?null:parseFloat($(id).value);
+$("sy").innerHTML=F.map(s=>`<label data-n="${s}"><input type="checkbox" value="${s}"> ${s.replace(/_/g," ")}</label>`).join("");
+function filt(){const q=$("q").value.toLowerCase().replace(/ /g,"_");document.querySelectorAll("#sy label").forEach(l=>l.style.display=l.dataset.n.includes(q)?"":"none")}
+function sim(){$("temp").value=(36.2+Math.random()*3.3).toFixed(1);$("hr").value=60+Math.floor(Math.random()*60);$("spo2").value=90+Math.floor(Math.random()*10)}
+function alerts(t,h,o,sy,di,g,S){const A=[],a=(l,m)=>A.push([l,m]);
+if(t>=39.5)a("d",`Very high temperature (${t}°C). Seek medical care.`);else if(t>=38)a("w",`Fever (${t}°C).`);if(t!==null&&t<35)a("d",`Low body temperature (${t}°C).`);
+if(o!==null&&o<92)a("d",`Low SpO₂ (${o}%). Urgent medical attention advised.`);else if(o!==null&&o<95)a("w",`Slightly low SpO₂ (${o}%).`);
+if(h!==null&&(h>120||h<45))a("d",`Abnormal heart rate (${h} bpm).`);else if(h>100)a("w",`Elevated heart rate (${h} bpm).`);
+if(sy&&di&&(sy>=180||di>=120))a("d",`Hypertensive crisis range (${sy}/${di}).`);else if(sy&&di&&(sy>=140||di>=90))a("w",`High blood pressure (${sy}/${di}).`);
+if(g!==null&&(g>=250||g<70))a("d",`Glucose out of safe range (${g} mg/dL).`);else if(g>=140)a("w",`Elevated glucose (${g} mg/dL).`);
+const e=EM.filter(x=>S.has(x));if(e.length)a("d","Potential emergency symptom(s): "+e.join(", ").replace(/_/g," "));return A}
+function run(){const S=new Set([...document.querySelectorAll("#sy input:checked")].map(i=>i.value));
+const t=v("temp"),h=v("hr"),o=v("spo2"),sy=v("sys"),di=v("dia"),g=v("glu");
+if(t>=38)S.add("high_fever");else if(t>=37.3)S.add("mild_fever");if(h>100)S.add("fast_heart_rate");if(o!==null&&o<94)S.add("breathlessness");
+if(!S.size){$("out").innerHTML='<div class="al w">Select at least one symptom or enter vitals.</div>';return}
+const R=Object.entries(D).map(([d,s])=>[d,s.filter(x=>S.has(x)).length/(s.length+0.5*[...S].filter(x=>!s.includes(x)).length)]).sort((a,b)=>b[1]-a[1]);
+const tot=R.reduce((a,b)=>a+b[1],0)||1,top=R.slice(0,3).map(([d,s])=>[d,s/tot]);
+const al=alerts(t,h,o,sy,di,g,S).map(([l,m])=>`<div class="al ${l}">${l=="d"?"🚨":"⚠️"} ${m}</div>`).join("");
+$("out").innerHTML=al+`<h3>Predicted: ${top[0][0]} (${(top[0][1]*100).toFixed(0)}%)</h3>`+top.map(([d,c])=>`<div>${d} ${(c*100).toFixed(0)}%<div class="bar"><i style="width:${c*100}%"></i></div></div>`).join("");
+H.unshift({t:new Date().toLocaleTimeString(),d:top[0][0],c:top[0][1],f:null});draw()}
+function fb(i,x){H[i].f=x;draw()}
+function draw(){$("hb").innerHTML=H.map((r,i)=>`<tr><td>${r.t}<td>${r.d}<td>${(r.c*100).toFixed(0)}%<td>${r.f||`<a href="#history" onclick="fb(${i},'correct')">👍</a> <a href="#history" onclick="fb(${i},'wrong')">👎</a>`}</tr>`).join("")||'<tr><td colspan="4">No predictions yet.</tr>';
+$("s1").textContent=H.length;const c={};H.forEach(r=>c[r.d]=(c[r.d]||0)+1);const m=Object.entries(c).sort((a,b)=>b[1]-a[1])[0];$("s2").textContent=m?m[0]:"—";
+const rated=H.filter(r=>r.f);$("s3").textContent=rated.length?Math.round(100*rated.filter(r=>r.f=="correct").length/rated.length)+"% ("+rated.length+" rated)":"No feedback yet"}
+function say(){const m=$("cm").value.trim();if(!m)return;const d=document.createElement("div"),b=document.createElement("b");b.textContent="You: ";d.append(b,m);$("cb").append(d);$("cm").value="";$("cb").scrollTop=1e5}
+render();$("cm").addEventListener("keydown",e=>{if(e.key=="Enter")say()});
+</script></body></html>
